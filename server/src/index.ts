@@ -6,6 +6,7 @@ import authRoutes from "./routes/auth.route";
 dotenv.config();
 const app = express();
 
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 //routes

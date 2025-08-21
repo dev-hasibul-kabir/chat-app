@@ -72,8 +72,13 @@ const authController: AuthController = {
   },
 
   logout: (req, res) => {
-    // Logic for user logout
-    res.send("User logged out");
+    try {
+      res.clearCookie("token");
+      res.status(200).json({ message: "Logout successful" });
+    } catch (error) {
+      console.log("Error during logout:", error);
+      res.status(500).json({ message: "Server error" });
+    }
   },
 };
 

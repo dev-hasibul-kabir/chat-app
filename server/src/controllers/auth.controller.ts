@@ -2,11 +2,13 @@ import { Request, Response } from "express";
 import User from "../models/user.model";
 import bcrypt from "bcryptjs";
 import generateJWT from "../lib/utils/genJWT";
+import cloudinary from "../lib/cloudinary";
 
 interface AuthController {
   login: (req: Request, res: Response) => void;
   register: (req: Request, res: Response) => void;
   logout: (req: Request, res: Response) => void;
+  updateProfile: (req: Request, res: Response) => void;
 }
 
 const authController: AuthController = {
@@ -77,6 +79,26 @@ const authController: AuthController = {
       res.status(200).json({ message: "Logout successful" });
     } catch (error) {
       console.log("Error during logout:", error);
+      res.status(500).json({ message: "Server error" });
+    }
+  },
+  updateProfile: async (req, res) => {
+    try {
+      const { profilePicture } = req.body;
+      const userId = req.user._id;
+      if (!profilePicture) {
+        return res.status(400).json({ message: "Profile picture is required" });
+      }
+      const uploadResult = await cloudinary.uploader.upload(profilePicture);
+      const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        { profilePicture: uploadResult.secure_url },
+        { new: true }
+      );
+
+      res.status(200).json(updatedUser);
+    } catch (error) {
+      console.log("Error updating profile:", error);
       res.status(500).json({ message: "Server error" });
     }
   },

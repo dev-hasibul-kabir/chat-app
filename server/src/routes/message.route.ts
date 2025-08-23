@@ -5,5 +5,6 @@ import messageController from "../controllers/message.controller";
 const messageRoutes = Router();
 
 messageRoutes.get("/users", authorizedRoute, messageController.getUsers);
+messageRoutes.get("/:userId", authorizedRoute, messageController.getMessages);
 
 export default messageRoutes;

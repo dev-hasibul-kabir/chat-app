@@ -2,10 +2,12 @@ import { Request, Response } from "express";
 import User from "../models/user.model";
 import Message from "../models/message.model";
 import mongoose from "mongoose";
+import cloudinary from "../lib/cloudinary";
 
 interface MessageController {
   getUsers: (req: Request, res: Response) => void;
   getMessages: (req: Request, res: Response) => void;
+  createMessage: (req: Request, res: Response) => void;
 }
 
 const messageController: MessageController = {
@@ -48,6 +50,48 @@ const messageController: MessageController = {
       res.status(200).json(messages);
     } catch (error) {
       console.log("Error fetching messages:", error);
+      res.status(500).json({ message: "Server error" });
+    }
+  },
+  createMessage: async (req, res) => {
+    try {
+      const myId = req.user._id;
+      const { userId: recipientId } = req.params;
+      const { text, image } = req.body;
+      // Validate recipient ID
+      if (!recipientId || !mongoose.Types.ObjectId.isValid(recipientId)) {
+        return res.status(400).json({ message: "Invalid recipient ID" });
+      }
+      // Validate recipient existence
+      const recipient = await User.findById(recipientId);
+      if (!recipient) {
+        return res.status(404).json({ message: "Recipient not found" });
+      }
+
+      let imageUrl = null;
+      if (image) {
+        const uploadResponse = await cloudinary.uploader.upload(image);
+        if (!uploadResponse || !uploadResponse.secure_url) {
+          console.log("Failed to upload image on cloudinary:", uploadResponse);
+          return res.status(500).json({ message: "Faild to send image" });
+        }
+        imageUrl = uploadResponse.secure_url;
+      }
+
+      const newMeessage = new Message({
+        sender: myId,
+        recipient: recipientId,
+        text,
+        image: imageUrl,
+      });
+      await newMeessage.save();
+      /* todo: Emit the message to the recipient via WebSocket or any other real-time mechanism
+      ...
+      ...
+      */
+      res.status(201).json(newMeessage);
+    } catch (error) {
+      console.log("Error creating message:", error);
       res.status(500).json({ message: "Server error" });
     }
   },

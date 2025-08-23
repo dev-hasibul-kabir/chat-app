@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
 import { connectDB } from "./lib/db";
 import authRoutes from "./routes/auth.route";
 import messageRoutes from "./routes/message.route";
@@ -9,6 +10,7 @@ const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cookieParser());
 
 //routes
 app.use("/api/auth", authRoutes);

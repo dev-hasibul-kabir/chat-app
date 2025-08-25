@@ -7,9 +7,7 @@ export default function AuthLayout() {
       className="h-screen w-screen bg-cover bg-center flex items-center justify-center"
       style={{ backgroundImage: `url(${bgImage})` }}
     >
-      <div>
-        <Outlet />
-      </div>
+      <Outlet />
     </div>
   );
 }

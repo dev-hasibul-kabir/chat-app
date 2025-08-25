@@ -1,12 +1,13 @@
 import { createBrowserRouter } from "react-router";
+import RootLayout from "./components/layouts/RootLayout";
 
 export const router = createBrowserRouter([
   {
-    Component: () => <div>Default Layout</div>,
+    Component: RootLayout,
     children: [
       { path: "/", Component: () => <div>Home</div> },
       { path: "/profile", Component: () => <div>Profile</div> },
-      { path: "/settigns", Component: () => <div>Settings</div> },
+      { path: "/settings", Component: () => <div>Settings</div> },
     ],
   },
   {

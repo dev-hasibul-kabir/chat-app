@@ -1,1 +1,26 @@
 @import "tailwindcss";
+
+@layer utilities {
+  /* Scrollbar width */
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 2px;
+    height: 6px;
+  }
+
+  /* Track */
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: theme("colors.gray.200");
+    border-radius: 9999px;
+  }
+
+  /* Thumb */
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: theme("colors.blue.500");
+    border-radius: 9999px;
+  }
+
+  /* Hover */
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: theme("colors.blue.600");
+  }
+}

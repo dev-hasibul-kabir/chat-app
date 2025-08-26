@@ -13,7 +13,7 @@ export default function SideNavBar() {
       {/* Profile */}
       <div className="flex flex-col items-center mb-8 text-white">
         <img
-          src="https://via.placeholder.com/40"
+          src="https://avatar.iran.liara.run/public/30"
           alt="profile"
           className="w-12 h-12 rounded-full"
         />

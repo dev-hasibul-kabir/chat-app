@@ -9,9 +9,9 @@ export default function SideNavBar() {
   ];
 
   return (
-    <div className="h-screen w-24 bg-gray-100 flex flex-col items-center py-4 ">
+    <div className="h-screen w-24 flex flex-col items-center py-4 bg-white/10 backdrop-blur-md border-r border-white/20">
       {/* Profile */}
-      <div className="flex flex-col items-center mb-8">
+      <div className="flex flex-col items-center mb-8 text-white">
         <img
           src="https://via.placeholder.com/40"
           alt="profile"
@@ -28,7 +28,7 @@ export default function SideNavBar() {
             to={item.path}
             className={({ isActive }) =>
               `flex flex-col items-center text-sm ${
-                isActive ? "text-emerald-600" : "text-gray-500"
+                isActive ? "text-cyan-400" : "text-white"
               }`
             }
           >

@@ -13,9 +13,8 @@ export default function Button({
   disabled,
   loading = false,
   children,
-  ref, // ✅ React 19 gives us `ref` directly
   ...props
-}: ButtonProps & { ref?: React.Ref<HTMLButtonElement> }) {
+}: ButtonProps) {
   const isDisabled = disabled || loading;
 
   const variantClass =
@@ -34,8 +33,7 @@ export default function Button({
 
   return (
     <button
-      ref={ref}
-      className={`relative rounded-lg font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${variantClass} ${sizeClass} ${
+      className={`relative rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${variantClass} ${sizeClass} ${
         fullWidth ? "w-full" : ""
       } ${className}`}
       disabled={isDisabled}

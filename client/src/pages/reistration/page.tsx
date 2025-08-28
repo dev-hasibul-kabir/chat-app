@@ -1,3 +1,5 @@
+import { Link } from "react-router";
+
 export default function Registration() {
   return (
     <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl shadow-lg p-8 w-full max-w-md">
@@ -37,6 +39,12 @@ export default function Registration() {
       <button className="w-full mt-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold">
         Signup
       </button>
+      <p className="mt-4 text-center text-sm text-white/80">
+        Already registered?{" "}
+        <Link to="/login" className="underline">
+          Sign in
+        </Link>
+      </p>
     </div>
   );
 }

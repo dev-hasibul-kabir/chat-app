@@ -3,6 +3,7 @@ import { z } from "zod";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Link } from "react-router";
 
 const loginSchema = z.object({
   email: z.string().min(1, "Email is required!").email(),
@@ -78,9 +79,9 @@ export default function Login() {
 
       <p className="mt-4 text-center text-sm text-white/80">
         Don't have an account?{" "}
-        <a href="register" className="underline">
+        <Link to="/register" className="underline">
           Sign up
-        </a>
+        </Link>
       </p>
     </div>
   );

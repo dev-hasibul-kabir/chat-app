@@ -36,7 +36,7 @@ export default async function authorizedRoute(
       return res.status(401).json({ message: "Unauthorized! Invalid token" });
     }
 
-    const user = await User.findById(decoded.userId).select("-password");
+    const user = await User.findById(decoded.userId).select("-password -__v");
     if (!user) {
       return res.status(401).json({ message: "Unauthorized! User not found" });
     }

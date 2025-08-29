@@ -3,7 +3,8 @@ import { z } from "zod";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useAuthStore } from "../../store/useAuthStore";
 
 const loginSchema = z.object({
   email: z.string().min(1, "Email is required!").email(),
@@ -16,10 +17,12 @@ const loginSchema = z.object({
 type FormData = z.infer<typeof loginSchema>;
 
 export default function Login() {
+  const navigate = useNavigate();
+  const { login, loading } = useAuthStore();
   const {
     handleSubmit,
     control,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -27,6 +30,25 @@ export default function Login() {
       password: "",
     },
   });
+
+  const onSubmit = async (data: FormData) => {
+    try {
+      const { success, message } = await login(data);
+
+      if (success) {
+        // toast.success(message);
+        console.log(message);
+        navigate("/", { replace: true });
+      } else {
+        console.log(message);
+        // toast.error(message);
+      }
+    } catch (err) {
+      // fallback in case something unexpected happens
+      // toast.error("An unexpected error occurred. Please try again.");
+      console.error(err);
+    }
+  };
 
   return (
     <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl shadow-lg p-8 w-full max-w-md">
@@ -36,12 +58,7 @@ export default function Login() {
 
       <h2 className="text-xl text-white font-semibold mb-6">Login</h2>
 
-      <form
-        className="space-y-6"
-        onSubmit={handleSubmit((data) => {
-          console.log(data);
-        })}
-      >
+      <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
         <Controller
           name="email"
           control={control}
@@ -72,7 +89,7 @@ export default function Login() {
           )}
         />
 
-        <Button type="submit" loading={isSubmitting} className="mt-4 w-full">
+        <Button type="submit" loading={loading} className="mt-4 w-full">
           Sign in
         </Button>
       </form>

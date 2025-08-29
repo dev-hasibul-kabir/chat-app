@@ -19,3 +19,18 @@ export interface UserProfile {
 export interface UpdateProfileData {
   profilePicture?: string;
 }
+
+export interface AuthStore {
+  user: UserProfile | null;
+  loading: boolean;
+  error: string | null;
+
+  login: (
+    credential: LoginCredentials
+  ) => Promise<{ success: boolean; message: string }>;
+  register: (
+    data: RegisterData
+  ) => Promise<{ success: boolean; message: string }>;
+  logout: () => Promise<void>;
+  fetchProfile: () => Promise<{ success: boolean }>;
+}

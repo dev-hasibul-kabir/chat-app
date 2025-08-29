@@ -6,6 +6,7 @@ const authRoutes = require("express").Router();
 authRoutes.post("/login", authController.login);
 authRoutes.post("/register", authController.register);
 authRoutes.post("/logout", authController.logout);
+authRoutes.get("/profile", authorizedRoute, authController.getProfile);
 authRoutes.patch("/profile", authorizedRoute, authController.updateProfile);
 
 export default authRoutes;

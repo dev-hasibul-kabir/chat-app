@@ -8,6 +8,7 @@ interface AuthController {
   login: (req: Request, res: Response) => void;
   register: (req: Request, res: Response) => void;
   logout: (req: Request, res: Response) => void;
+  getProfile: (req: Request, res: Response) => void;
   updateProfile: (req: Request, res: Response) => void;
 }
 
@@ -57,7 +58,7 @@ const authController: AuthController = {
 
       const user = await User.findOne({ email });
       if (!user) {
-        return res.status(400).json({ message: "User not found" });
+        return res.status(404).json({ message: "User not found" });
       }
 
       const isMatch = await bcrypt.compare(password, user.password);
@@ -79,6 +80,20 @@ const authController: AuthController = {
       res.status(200).json({ message: "Logout successful" });
     } catch (error) {
       console.log("Error during logout:", error);
+      res.status(500).json({ message: "Server error" });
+    }
+  },
+
+  getProfile: async (req, res) => {
+    try {
+      const user = req.user;
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      res.status(200).json(user);
+    } catch (error) {
+      console.log("Error getting profile:", error);
       res.status(500).json({ message: "Server error" });
     }
   },

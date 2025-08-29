@@ -9,7 +9,7 @@ const userService = {
   login: (credentials: LoginCredentials) =>
     api.post("/auth/login", credentials),
   register: (data: RegisterData) => api.post("/auth/register", data),
-  getProfile: () => api.get("/auth/pofile"),
+  getProfile: () => api.get("/auth/profile"),
   updateProfile: (data: UpdateProfileData) => api.patch("/auth/profile", data),
   logout: () => api.post("/auth/logout"),
 };

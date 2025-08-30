@@ -3,6 +3,7 @@ import SideNavBar from "../SideNavBar";
 import bgImage from "../../assets/images/root-layout-bg.png";
 import { useAuthStore } from "../../store/useAuthStore";
 import { useEffect } from "react";
+import PaperPlaneLoader from "../PaperPlaneLoader";
 
 export default function RootLayout() {
   const navigate = useNavigate();
@@ -11,7 +12,8 @@ export default function RootLayout() {
   useEffect(() => {
     if (!user) fetchProfile();
   }, []);
-  if (loading) return <div>Loading</div>;
+  if (loading) return <PaperPlaneLoader />;
+
   if (!user) {
     navigate("/login", { replace: true });
   }

@@ -2,6 +2,7 @@ import { Outlet, useNavigate } from "react-router";
 import bgImage from "../../assets/images/bg-image.png";
 import { useAuthStore } from "../../store/useAuthStore";
 import { useEffect } from "react";
+import PaperPlaneLoader from "../PaperPlaneLoader";
 
 export default function AuthLayout() {
   const navigate = useNavigate();
@@ -10,7 +11,7 @@ export default function AuthLayout() {
   useEffect(() => {
     if (!user) fetchProfile();
   }, []);
-  if (loading) return <div>Loading</div>;
+  if (loading) return <PaperPlaneLoader />;
   if (user) {
     navigate("/", { replace: true });
   }

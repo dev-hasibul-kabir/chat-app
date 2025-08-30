@@ -10,10 +10,12 @@ export interface RegisterData {
 }
 
 export interface UserProfile {
-  id: string;
+  _id: string;
   name: string;
   email: string;
   profilePicture?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface UpdateProfileData {

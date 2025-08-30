@@ -57,7 +57,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
 
   logout: async () => {
     try {
-      await userService.logout(); // backend clears cookie
+      await userService.logout();
     } finally {
       set({ user: null });
     }
@@ -67,6 +67,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
     try {
       set({ loading: true, error: null });
       const res = await userService.getProfile();
+
       set({ user: res.data, loading: false });
       return { success: true };
     } catch (err) {

@@ -1,7 +1,10 @@
 import { NavLink } from "react-router";
 import { FaComments, FaUserAlt, FaCog } from "react-icons/fa";
+import { useAuthStore } from "../store/useAuthStore";
 
 export default function SideNavBar() {
+  const { user } = useAuthStore();
+
   const navItems = [
     { id: "chats", label: "Chats", icon: <FaComments />, path: "/" },
     { id: "profile", label: "Profile", icon: <FaUserAlt />, path: "/profile" },
@@ -13,11 +16,15 @@ export default function SideNavBar() {
       {/* Profile */}
       <div className="flex flex-col items-center mb-8 text-white">
         <img
-          src="https://avatar.iran.liara.run/public/30"
+          src={
+            user?.profilePicture || "https://avatar.iran.liara.run/public/30"
+          }
           alt="profile"
           className="w-12 h-12 rounded-full"
         />
-        <p className="text-xs mt-2">@emma95</p>
+        <p className="text-xs mt-2 text-center break-words w-20">
+          {user?.email ? user.email.split("@")[0] : ""}
+        </p>
       </div>
 
       {/* Nav Items */}

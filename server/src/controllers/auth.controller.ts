@@ -99,15 +99,12 @@ const authController: AuthController = {
   },
   updateProfile: async (req, res) => {
     try {
-      const { profilePicture } = req.body;
+      const result = req.cloudinaryResult;
       const userId = req.user._id;
-      if (!profilePicture) {
-        return res.status(400).json({ message: "Profile picture is required" });
-      }
-      const uploadResult = await cloudinary.uploader.upload(profilePicture);
+
       const updatedUser = await User.findByIdAndUpdate(
         userId,
-        { profilePicture: uploadResult.secure_url },
+        { profilePicture: result.secure_url },
         { new: true }
       );
 

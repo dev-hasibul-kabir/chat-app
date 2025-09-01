@@ -22,11 +22,14 @@ export interface UpdateProfileData {
   profilePicture?: File;
 }
 
+type RequestKey = "login" | "register" | "fetchProfile" | "updateProfile";
+interface AsyncState {
+  loading: boolean;
+  error: string | null;
+}
 export interface AuthStore {
   user: UserProfile | null;
-  loading: boolean;
-  updating: boolean;
-  error: string | null;
+  requestStatus: Record<RequestKey, AsyncState>;
 
   login: (
     credential: LoginCredentials

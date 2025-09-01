@@ -18,7 +18,8 @@ type FormData = z.infer<typeof signupSchema>;
 
 export default function Registration() {
   const navigate = useNavigate();
-  const { register, loading } = useAuthStore();
+  const { register, requestStatus } = useAuthStore();
+  const { loading, error } = requestStatus.register;
 
   const {
     handleSubmit,
@@ -40,7 +41,7 @@ export default function Registration() {
         console.log(message);
         navigate("/", { replace: true });
       } else {
-        console.log(message);
+        console.log(error);
       }
     } catch (error) {
       console.log(error);

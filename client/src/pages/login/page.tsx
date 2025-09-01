@@ -18,7 +18,8 @@ type FormData = z.infer<typeof loginSchema>;
 
 export default function Login() {
   const navigate = useNavigate();
-  const { login, loading } = useAuthStore();
+  const { login, requestStatus } = useAuthStore();
+  const { loading, error } = requestStatus.login;
   const {
     handleSubmit,
     control,
@@ -40,7 +41,7 @@ export default function Login() {
         console.log(message);
         navigate("/", { replace: true });
       } else {
-        console.log(message);
+        console.log(error);
         // toast.error(message);
       }
     } catch (err) {

@@ -3,7 +3,8 @@ import { useAuthStore } from "../../store/useAuthStore";
 import { useRef, useState, type ChangeEvent } from "react";
 
 export default function Profile() {
-  const { user, updateProfile, loading, updating } = useAuthStore();
+  const { user, updateProfile, requestStatus } = useAuthStore();
+  const { loading, error } = requestStatus.updateProfile;
   const [preview, setPreview] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -19,7 +20,7 @@ export default function Profile() {
         if (success) {
           console.log(message);
         } else {
-          console.log(message);
+          console.log(error);
         }
       } catch (err) {
         console.log(err);
@@ -31,7 +32,7 @@ export default function Profile() {
     <div className="flex items-center justify-center min-h-screen text-white">
       <div className="shadow-lg rounded-2xl p-8 w-2/4 text-center backdrop-blur-sm bg-white/10">
         <div className="relative w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 mx-auto border-4 border-blue-300 rounded-full">
-          {loading || updating ? (
+          {loading ? (
             <img
               className="w-full h-full rounded-full object-cover blur-xs"
               src={preview || "https://avatar.iran.liara.run/public/30"}

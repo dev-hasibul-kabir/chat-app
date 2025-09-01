@@ -6,7 +6,8 @@ import PaperPlaneLoader from "../PaperPlaneLoader";
 
 export default function AuthLayout() {
   const navigate = useNavigate();
-  const { fetchProfile, loading, user } = useAuthStore();
+  const { fetchProfile, user, requestStatus } = useAuthStore();
+  const { loading } = requestStatus.fetchProfile;
 
   useEffect(() => {
     if (!user) fetchProfile();

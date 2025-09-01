@@ -19,12 +19,13 @@ export interface UserProfile {
 }
 
 export interface UpdateProfileData {
-  profilePicture?: string;
+  profilePicture?: File;
 }
 
 export interface AuthStore {
   user: UserProfile | null;
   loading: boolean;
+  updating: boolean;
   error: string | null;
 
   login: (
@@ -35,4 +36,7 @@ export interface AuthStore {
   ) => Promise<{ success: boolean; message: string }>;
   logout: () => Promise<void>;
   fetchProfile: () => Promise<{ success: boolean }>;
+  updateProfile: (
+    data: UpdateProfileData
+  ) => Promise<{ success: boolean; message: string }>;
 }

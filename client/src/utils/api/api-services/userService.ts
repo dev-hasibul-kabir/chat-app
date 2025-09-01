@@ -3,14 +3,15 @@ import type {
   RegisterData,
   UpdateProfileData,
 } from "../../types/auth";
-import api from "../axios.config";
+import api, { formDataHeaders } from "../axios.config";
 
 const userService = {
   login: (credentials: LoginCredentials) =>
     api.post("/auth/login", credentials),
   register: (data: RegisterData) => api.post("/auth/register", data),
   getProfile: () => api.get("/auth/profile"),
-  updateProfile: (data: UpdateProfileData) => api.patch("/auth/profile", data),
+  updateProfile: (data: UpdateProfileData) =>
+    api.patch("/auth/profile", data, formDataHeaders),
   logout: () => api.post("/auth/logout"),
 };
 

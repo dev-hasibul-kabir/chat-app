@@ -3,6 +3,7 @@ import type {
   AuthStore,
   LoginCredentials,
   RegisterData,
+  UpdateProfileData,
 } from "../utils/types/auth";
 import userService from "../utils/api/api-services/userService";
 import axios from "axios";
@@ -11,6 +12,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
   user: null,
   loading: false,
   error: null,
+  updating: false,
 
   login: async (credential: LoginCredentials) => {
     try {
@@ -70,9 +72,29 @@ export const useAuthStore = create<AuthStore>((set) => ({
 
       set({ user: res.data, loading: false });
       return { success: true };
-    } catch (err) {
-      set({ user: null, loading: false });
-      return { success: false };
+    } catch (error) {
+      let errorMsg = "Failed to fetch profile!";
+      if (axios.isAxiosError(error)) {
+        errorMsg = error.response?.data?.message || error.message || errorMsg;
+      }
+      set({ error: errorMsg, loading: false });
+      return { success: false, message: errorMsg };
+    }
+  },
+
+  updateProfile: async (data: UpdateProfileData) => {
+    try {
+      set({ updating: true, error: null });
+      const res = await userService.updateProfile(data);
+      set({ user: res.data, updating: false });
+      return { success: true, message: "Profile Updated!" };
+    } catch (error) {
+      let errorMsg = "Failed to update profile!";
+      if (axios.isAxiosError(error)) {
+        errorMsg = error.response?.data?.message || error.message || errorMsg;
+      }
+      set({ error: errorMsg, updating: false });
+      return { success: false, message: errorMsg };
     }
   },
 }));

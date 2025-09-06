@@ -13,13 +13,17 @@ declare module "express-serve-static-core" {
 // Temp storage
 const upload = multer({ dest: "public/uploads/" });
 
-export const fileUpload = (fieldName: string) => {
+export const fileUpload = (fieldName: string, required: boolean = true) => {
   return [
     upload.single(fieldName),
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         if (!req.file) {
-          return res.status(400).json({ error: "No file uploaded" });
+          if (required) {
+            return res.status(400).json({ error: "No file uploaded" });
+          } else {
+            return next();
+          }
         }
 
         const result = await cloudinary.uploader.upload(req.file.path);

@@ -57,7 +57,7 @@ const messageController: MessageController = {
     try {
       const myId = req.user._id;
       const { userId: recipientId } = req.params;
-      const { text, image } = req.body;
+      const { text } = req.body;
       // Validate recipient ID
       if (!recipientId || !mongoose.Types.ObjectId.isValid(recipientId)) {
         return res.status(400).json({ message: "Invalid recipient ID" });
@@ -68,21 +68,11 @@ const messageController: MessageController = {
         return res.status(404).json({ message: "Recipient not found" });
       }
 
-      let imageUrl = null;
-      if (image) {
-        const uploadResponse = await cloudinary.uploader.upload(image);
-        if (!uploadResponse || !uploadResponse.secure_url) {
-          console.log("Failed to upload image on cloudinary:", uploadResponse);
-          return res.status(500).json({ message: "Faild to send image" });
-        }
-        imageUrl = uploadResponse.secure_url;
-      }
-
       const newMeessage = new Message({
         sender: myId,
         recipient: recipientId,
-        text,
-        image: imageUrl,
+        text: text || undefined,
+        image: req.cloudinaryResult || undefined,
       });
       await newMeessage.save();
       /* todo: Emit the message to the recipient via WebSocket or any other real-time mechanism

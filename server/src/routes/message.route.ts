@@ -1,6 +1,7 @@
 import { Router } from "express";
 import authorizedRoute from "../middlewares/auth.middleware";
 import messageController from "../controllers/message.controller";
+import { fileUpload } from "../middlewares/fileUpload.middleware";
 
 const messageRoutes = Router();
 
@@ -13,6 +14,7 @@ messageRoutes.get(
 messageRoutes.post(
   "/users/:userId",
   authorizedRoute,
+  fileUpload("image", false),
   messageController.createMessage
 );
 

@@ -1,19 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FaFileImage } from "react-icons/fa";
+import { IoSend } from "react-icons/io5";
 import { useSearchParams } from "react-router";
 import { useMessageStore } from "../../../store/useMessageStore";
+import Input from "../../../components/Input";
 
 function PartnerMessage() {
-  const { getMessages, activeChat, requestStatus } = useMessageStore();
-  const searchParam = useSearchParams();
-  const partner_id = searchParam[0].get("id");
-
-  useEffect(() => {
-    if (partner_id) {
-      getMessages(partner_id);
-    }
-  }, [partner_id]);
-
   return (
     <div className="flex justify-start">
       <div className="bg-white/10 text-white p-3 rounded-lg max-w-xs">
@@ -36,6 +28,27 @@ function MyMessage() {
 }
 
 export default function Chat() {
+  const [text, setText] = useState<string>("");
+  const { getMessages, sendMessage, requestStatus } = useMessageStore();
+  const searchParam = useSearchParams();
+  const partner_id = searchParam[0].get("id");
+
+  useEffect(() => {
+    if (partner_id) {
+      getMessages(partner_id);
+    }
+  }, [partner_id]);
+
+  function handleSendMessage() {
+    try {
+      if (!text.trim() || !partner_id) return;
+      sendMessage(partner_id, { text: text.trim() });
+      setText("");
+    } catch (error) {
+      console.log("Failed to send message:", error);
+    }
+  }
+
   return (
     <>
       <div className="backdrop-blur-md bg-white/10 p-4 flex justify-between items-center ">
@@ -60,15 +73,31 @@ export default function Chat() {
       {/* Chat Area */}
       <div className="h-[80vh] overflow-y-auto scrollbar-thin p-6 space-y-4">
         <PartnerMessage />
-
         <MyMessage />
       </div>
 
       <div className="fixed bottom-0 left-0 w-full flex gap-3 items-center p-6 bg-white/10 backdrop-blur-md">
-        <input
+        <Input
+          className="rounded-full pr-8"
           type="text"
-          className="w-full px-4 py-2 rounded-full bg-white/20 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          value={text}
+          onChange={(val) => setText(val ? String(val) : "")}
+          disabled={requestStatus.sendMessage.loading}
         />
+        <button
+          className="absolute right-18 top-8.5 cursor-pointer"
+          disabled={requestStatus.sendMessage.loading}
+          onClick={handleSendMessage}
+        >
+          <IoSend
+            className={`size-5 ${
+              requestStatus.sendMessage.loading
+                ? "text-white/40"
+                : "text-white/70"
+            } `}
+          />
+        </button>
+
         <FaFileImage className="size-7 text-white/70" />
       </div>
     </>

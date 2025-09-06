@@ -8,6 +8,9 @@ export interface Message {
   recipient?: any;
   text?: string;
   image?: string;
+  createdAt: string;
+  updatedAt: string;
+  _id: string;
 }
 
 export interface MessageUser {

@@ -4,24 +4,27 @@ import { IoSend } from "react-icons/io5";
 import { useSearchParams } from "react-router";
 import { useMessageStore } from "../../../store/useMessageStore";
 import Input from "../../../components/Input";
+import type { Message } from "../../../utils/types/message";
+import { useAuthStore } from "../../../store/useAuthStore";
+import { formatChatDate } from "../../../utils/utilKit";
 
-function PartnerMessage() {
+function Message({ msg, myId }: { msg: Message; myId: string | undefined }) {
   return (
-    <div className="flex justify-start">
-      <div className="bg-white/10 text-white p-3 rounded-lg max-w-xs">
-        <p>Hello! How are you?</p>
-        <span className="text-xs text-gray-200">2:30 PM</span>
-      </div>
-    </div>
-  );
-}
+    <div
+      className={`flex ${
+        msg.sender === myId ? "justify-end" : "justify-start"
+      }`}
+    >
+      <div
+        className={`text-white p-3 rounded-lg max-w-xs ${
+          msg.sender === myId ? "bg-sky-600" : "bg-white/10"
+        } space-y-2`}
+      >
+        {!!msg.text && <p>{msg.text}</p>}
 
-function MyMessage() {
-  return (
-    <div className="flex justify-end">
-      <div className="bg-sky-600 text-white p-3 rounded-lg max-w-xs">
-        <p>I'm good, thanks! How about you?</p>
-        <span className="text-xs text-gray-200">2:31 PM</span>
+        <span className="text-xs text-gray-200">
+          {formatChatDate(msg.createdAt)}
+        </span>
       </div>
     </div>
   );
@@ -29,7 +32,9 @@ function MyMessage() {
 
 export default function Chat() {
   const [text, setText] = useState<string>("");
-  const { getMessages, sendMessage, requestStatus } = useMessageStore();
+  const { getMessages, sendMessage, activeChat, requestStatus } =
+    useMessageStore();
+  const { user } = useAuthStore();
   const searchParam = useSearchParams();
   const partner_id = searchParam[0].get("id");
 
@@ -72,8 +77,15 @@ export default function Chat() {
 
       {/* Chat Area */}
       <div className="h-[80vh] overflow-y-auto scrollbar-thin p-6 space-y-4">
-        <PartnerMessage />
-        <MyMessage />
+        {requestStatus.getMessages.loading
+          ? "Loading..."
+          : !!requestStatus.getMessages.error
+          ? requestStatus.getMessages.error
+          : activeChat?.length
+          ? activeChat.map((msg) => (
+              <Message key={msg._id} msg={msg} myId={user?._id} />
+            ))
+          : "No messages"}
       </div>
 
       <div className="fixed bottom-0 left-0 w-full flex gap-3 items-center p-6 bg-white/10 backdrop-blur-md">

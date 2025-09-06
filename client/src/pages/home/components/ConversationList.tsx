@@ -19,11 +19,12 @@ export default function ConversationList() {
         className="w-full px-4 py-2 rounded-full bg-white/20 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-blue-400"
       />
       <div className="mt-6 bg-white/10 backdrop-blur-md p-4 space-y-6 overflow-y-auto scrollbar-thin h-[86vh]">
-        {!!error && error}
         {loading
           ? "Loading..."
+          : !!error
+          ? error
           : users?.length
-          ? users.map((user) => <ChatHead user={user} />)
+          ? users.map((user) => <ChatHead key={user._id} user={user} />)
           : "No users"}
       </div>
     </>

@@ -1,6 +1,19 @@
+import { useEffect } from "react";
 import { FaFileImage } from "react-icons/fa";
+import { useSearchParams } from "react-router";
+import { useMessageStore } from "../../../store/useMessageStore";
 
 function PartnerMessage() {
+  const { getMessages, activeChat, requestStatus } = useMessageStore();
+  const searchParam = useSearchParams();
+  const partner_id = searchParam[0].get("id");
+
+  useEffect(() => {
+    if (partner_id) {
+      getMessages(partner_id);
+    }
+  }, [partner_id]);
+
   return (
     <div className="flex justify-start">
       <div className="bg-white/10 text-white p-3 rounded-lg max-w-xs">

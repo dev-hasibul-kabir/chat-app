@@ -9,6 +9,10 @@ export default function MessagePage() {
       </div>
 
       <div className="w-3/4 h-[98vh] backdrop-blur-md bg-white/10">
+        {/* <p className="text-center mt-20">
+          No chat selected.
+          <br /> Pick a contact to begin or start a new conversation.
+        </p> */}
         <Chat />
       </div>
     </div>

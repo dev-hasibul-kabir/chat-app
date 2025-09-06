@@ -1,8 +1,15 @@
+import { useNavigate } from "react-router";
 import type { MessageUser } from "../../../utils/types/message";
 
 export default function ChatHead({ user }: { user: MessageUser }) {
+  const navigate = useNavigate();
   return (
-    <div className="grid grid-cols-6">
+    <div
+      className="grid grid-cols-6 hover:bg-white/10 p-2 rounded-lg cursor-pointer"
+      onClick={() => {
+        navigate(`/message?id=${user._id}`);
+      }}
+    >
       <div className="col-span-1 relative">
         <div className="size-3 rounded-full bg-green-500 border border-white absolute"></div>
         <img

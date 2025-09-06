@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, Navigate } from "react-router";
 import RootLayout from "./components/layouts/RootLayout";
 import AuthLayout from "./components/layouts/AuthLayout";
 import Login from "./pages/login/page";
@@ -10,7 +10,8 @@ export const router = createBrowserRouter([
   {
     Component: RootLayout,
     children: [
-      { path: "/", Component: MessagePage },
+      { index: true, element: <Navigate to="/message" replace /> },
+      { path: "/message", Component: MessagePage },
       { path: "/profile", Component: Profile },
       { path: "/settings", Component: () => <div>Settings</div> },
     ],

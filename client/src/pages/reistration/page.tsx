@@ -39,7 +39,7 @@ export default function Registration() {
       const { success, message } = await register(data);
       if (success) {
         console.log(message);
-        navigate("/", { replace: true });
+        navigate("/message", { replace: true });
       } else {
         console.log(error);
       }

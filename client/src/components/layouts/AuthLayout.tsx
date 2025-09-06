@@ -14,7 +14,7 @@ export default function AuthLayout() {
   }, []);
   if (loading) return <PaperPlaneLoader />;
   if (user) {
-    navigate("/", { replace: true });
+    navigate("/message", { replace: true });
   }
   return (
     <div

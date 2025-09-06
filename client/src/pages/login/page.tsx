@@ -39,7 +39,7 @@ export default function Login() {
       if (success) {
         // toast.success(message);
         console.log(message);
-        navigate("/", { replace: true });
+        navigate("/message", { replace: true });
       } else {
         console.log(error);
         // toast.error(message);

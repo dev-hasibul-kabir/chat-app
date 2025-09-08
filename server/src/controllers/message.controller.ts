@@ -71,8 +71,8 @@ const messageController: MessageController = {
       const newMeessage = new Message({
         sender: myId,
         recipient: recipientId,
-        text: text || undefined,
-        image: req.cloudinaryResult || undefined,
+        text: text || "",
+        image: req.cloudinaryResult.secure_url || undefined,
       });
       await newMeessage.save();
       /* todo: Emit the message to the recipient via WebSocket or any other real-time mechanism

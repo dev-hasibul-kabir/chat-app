@@ -20,6 +20,13 @@ function Message({ msg, myId }: { msg: Message; myId: string | undefined }) {
           msg.sender === myId ? "bg-sky-600" : "bg-white/10"
         } space-y-2`}
       >
+        {!!msg.image && (
+          <img
+            src={msg.image}
+            alt="Message Image"
+            className="max-w-full h-auto rounded"
+          />
+        )}
         {!!msg.text && <p>{msg.text}</p>}
 
         <span className="text-xs text-gray-200">
@@ -51,6 +58,17 @@ export default function Chat() {
       setText("");
     } catch (error) {
       console.log("Failed to send message:", error);
+    }
+  }
+
+  function handleImmageUpload(event: React.ChangeEvent<HTMLInputElement>) {
+    try {
+      const file = event.target.files?.[0];
+      if (!file || !partner_id) return;
+
+      sendMessage(partner_id, { image: file });
+    } catch (error) {
+      console.log("Failed to upload image:", error);
     }
   }
 
@@ -110,7 +128,17 @@ export default function Chat() {
           />
         </button>
 
-        <FaFileImage className="size-7 text-white/70" />
+        <input
+          type="file"
+          id="imageUpload"
+          className="hidden"
+          accept="image/*"
+          onChange={handleImmageUpload}
+          disabled={requestStatus.sendMessage.loading}
+        />
+        <label htmlFor="imageUpload" className="cursor-pointer">
+          <FaFileImage className="size-7 text-white/70" />
+        </label>
       </div>
     </>
   );

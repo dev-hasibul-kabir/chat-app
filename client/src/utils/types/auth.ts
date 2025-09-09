@@ -27,8 +27,11 @@ interface AsyncState {
   loading: boolean;
   error: string | null;
 }
+
+import type * as SocketIOClient from "socket.io-client";
 export interface AuthStore {
   user: UserProfile | null;
+  socket: SocketIOClient.Socket | null;
   requestStatus: Record<RequestKey, AsyncState>;
 
   login: (
@@ -42,4 +45,6 @@ export interface AuthStore {
   updateProfile: (
     data: UpdateProfileData
   ) => Promise<{ success: boolean; message: string }>;
+  connectSocket: () => void;
+  disconnectSocket: () => void;
 }

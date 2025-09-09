@@ -7,6 +7,7 @@ import type {
 } from "../utils/types/auth";
 import userService from "../utils/api/api-services/userService";
 import axios from "axios";
+import { io } from "socket.io-client";
 
 const initialStatus = {
   login: { loading: false, error: null },
@@ -15,8 +16,9 @@ const initialStatus = {
   updateProfile: { loading: false, error: null },
 };
 
-export const useAuthStore = create<AuthStore>((set) => ({
+export const useAuthStore = create<AuthStore>((set, get) => ({
   user: null,
+  socket: null,
   requestStatus: initialStatus,
 
   login: async (credential: LoginCredentials) => {
@@ -39,6 +41,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
         },
       }));
 
+      get().connectSocket();
       return { success: true, message: res.data.message };
     } catch (error) {
       let errorMsg = "Login failed";
@@ -76,6 +79,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
         },
       }));
 
+      get().connectSocket();
       return {
         success: true,
         message: res.data.message || "Registration successful",
@@ -99,6 +103,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
   logout: async () => {
     try {
       await userService.logout();
+      get().disconnectSocket();
     } finally {
       set({ user: null });
     }
@@ -122,6 +127,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
         },
       }));
 
+      get().connectSocket();
       return { success: true };
     } catch (error) {
       let errorMsg = "Failed to fetch profile!";
@@ -167,6 +173,22 @@ export const useAuthStore = create<AuthStore>((set) => ({
         },
       }));
       return { success: false, message: errorMsg };
+    }
+  },
+
+  connectSocket: () => {
+    const { user } = get();
+    if (!user || get().socket?.connected) return;
+    const socket = io(import.meta.env.VITE_API_URL, { withCredentials: true });
+    socket.connect();
+
+    set({ socket });
+  },
+
+  disconnectSocket: () => {
+    if (get().socket?.connected) {
+      get().socket?.disconnect();
+      set({ socket: null });
     }
   },
 }));

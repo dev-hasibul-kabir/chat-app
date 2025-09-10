@@ -9,6 +9,7 @@ export const server = createServer(app);
 export const io = new Server(server, {
   cors: {
     origin: process.env.CLIENT_CORS_ORIGIN,
+    credentials: true,
   },
 });
 

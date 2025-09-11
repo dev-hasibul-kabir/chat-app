@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaFileImage } from "react-icons/fa";
 import { IoSend } from "react-icons/io5";
 import { useSearchParams } from "react-router";
@@ -39,6 +39,8 @@ function Message({ msg, myId }: { msg: Message; myId: string | undefined }) {
 
 export default function Chat() {
   const [text, setText] = useState<string>("");
+  const bottomRef = useRef<HTMLDivElement>(null);
+
   const {
     getMessages,
     sendMessage,
@@ -88,6 +90,10 @@ export default function Chat() {
     }
   }
 
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "auto" });
+  }, [activeChat, requestStatus.getMessages.loading]);
+
   return (
     <>
       <div className="backdrop-blur-md bg-white/10 p-4 flex justify-between items-center ">
@@ -120,6 +126,7 @@ export default function Chat() {
               <Message key={msg._id} msg={msg} myId={user?._id} />
             ))
           : "No messages"}
+        <div ref={bottomRef} />
       </div>
 
       <div className="fixed bottom-0 left-0 w-full flex gap-3 items-center p-6 bg-white/10 backdrop-blur-md">

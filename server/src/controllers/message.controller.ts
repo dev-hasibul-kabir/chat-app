@@ -73,7 +73,7 @@ const messageController: MessageController = {
         sender: myId,
         recipient: recipientId,
         text: text || "",
-        image: req.cloudinaryResult.secure_url || undefined,
+        image: req.cloudinaryResult?.secure_url || undefined,
       });
       await newMeessage.save();
 

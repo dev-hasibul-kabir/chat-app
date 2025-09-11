@@ -32,6 +32,7 @@ import type * as SocketIOClient from "socket.io-client";
 export interface AuthStore {
   user: UserProfile | null;
   socket: SocketIOClient.Socket | null;
+  onlineUsers: string[] | null;
   requestStatus: Record<RequestKey, AsyncState>;
 
   login: (

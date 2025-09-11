@@ -19,6 +19,7 @@ const initialStatus = {
 export const useAuthStore = create<AuthStore>((set, get) => ({
   user: null,
   socket: null,
+  onlineUsers: null,
   requestStatus: initialStatus,
 
   login: async (credential: LoginCredentials) => {
@@ -180,10 +181,13 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     const { user } = get();
     if (!user || get().socket?.connected) return;
     const socket = io(import.meta.env.VITE_API_URL_WS, {
-      withCredentials: true,
+      query: { userId: user._id },
     });
     socket.connect();
 
+    socket.on("onlineUsers", (onlineUserIds: string[]) => {
+      set({ onlineUsers: onlineUserIds });
+    });
     set({ socket });
   },
 

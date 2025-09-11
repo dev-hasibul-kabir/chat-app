@@ -13,10 +13,18 @@ export const io = new Server(server, {
   },
 });
 
+const userSockets: Record<string, string> = {};
 io.on("connection", (socket) => {
-  console.log("a user connected", socket.id);
+  console.log("user connected", socket.id);
+  const { userId } = socket.handshake.query;
+
+  if (userId) userSockets[userId as string] = socket.id;
+
+  io.emit("onlineUsers", Object.keys(userSockets));
 
   socket.on("disconnect", () => {
     console.log("user disconnected", socket.id);
+    delete userSockets[userId as string];
+    io.emit("onlineUsers", Object.keys(userSockets));
   });
 });

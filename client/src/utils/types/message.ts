@@ -38,4 +38,7 @@ export interface MessageStore {
     partnerId: string,
     data: messagePayload
   ) => Promise<{ success: boolean; message?: string }>;
+
+  subscribeToNewMessages: (partnerId: string) => void;
+  unSubscribeFromNewMessages: () => void;
 }

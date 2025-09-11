@@ -39,8 +39,14 @@ function Message({ msg, myId }: { msg: Message; myId: string | undefined }) {
 
 export default function Chat() {
   const [text, setText] = useState<string>("");
-  const { getMessages, sendMessage, activeChat, requestStatus } =
-    useMessageStore();
+  const {
+    getMessages,
+    sendMessage,
+    activeChat,
+    subscribeToNewMessages,
+    unSubscribeFromNewMessages,
+    requestStatus,
+  } = useMessageStore();
   const { user } = useAuthStore();
   const searchParam = useSearchParams();
   const partner_id = searchParam[0].get("id");
@@ -48,8 +54,18 @@ export default function Chat() {
   useEffect(() => {
     if (partner_id) {
       getMessages(partner_id);
+      subscribeToNewMessages(partner_id);
     }
-  }, [partner_id]);
+
+    return () => {
+      unSubscribeFromNewMessages();
+    };
+  }, [
+    partner_id,
+    getMessages,
+    subscribeToNewMessages,
+    unSubscribeFromNewMessages,
+  ]);
 
   function handleSendMessage() {
     try {

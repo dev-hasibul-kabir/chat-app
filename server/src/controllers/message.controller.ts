@@ -3,6 +3,7 @@ import User from "../models/user.model";
 import Message from "../models/message.model";
 import mongoose from "mongoose";
 import cloudinary from "../lib/cloudinary";
+import { getSocketIdByUserId, io } from "../lib/socket-io";
 
 interface MessageController {
   getUsers: (req: Request, res: Response) => void;
@@ -75,10 +76,14 @@ const messageController: MessageController = {
         image: req.cloudinaryResult.secure_url || undefined,
       });
       await newMeessage.save();
-      /* todo: Emit the message to the recipient via WebSocket or any other real-time mechanism
-      ...
-      ...
-      */
+
+      //  Emit the message to the recipient via socket.io
+      const receiverSocketId = getSocketIdByUserId(recipientId);
+      if (receiverSocketId) {
+        io.to(receiverSocketId).emit("newMessage", newMeessage);
+      }
+      //
+
       res.status(201).json(newMeessage);
     } catch (error) {
       console.log("Error creating message:", error);

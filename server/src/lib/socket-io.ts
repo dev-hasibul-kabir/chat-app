@@ -14,6 +14,7 @@ export const io = new Server(server, {
 });
 
 const userSockets: Record<string, string> = {};
+
 io.on("connection", (socket) => {
   console.log("user connected", socket.id);
   const { userId } = socket.handshake.query;
@@ -28,3 +29,7 @@ io.on("connection", (socket) => {
     io.emit("onlineUsers", Object.keys(userSockets));
   });
 });
+
+export const getSocketIdByUserId = (userId: string) => {
+  return userSockets[userId];
+};

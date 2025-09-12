@@ -4,38 +4,8 @@ import { IoSend } from "react-icons/io5";
 import { useSearchParams } from "react-router";
 import { useMessageStore } from "../../../store/useMessageStore";
 import Input from "../../../components/Input";
-import type { Message } from "../../../utils/types/message";
 import { useAuthStore } from "../../../store/useAuthStore";
-import { formatChatDate } from "../../../utils/utilKit";
-
-function Message({ msg, myId }: { msg: Message; myId: string | undefined }) {
-  return (
-    <div
-      className={`flex ${
-        msg.sender === myId ? "justify-end" : "justify-start"
-      }`}
-    >
-      <div
-        className={`text-white p-3 rounded-lg max-w-xs ${
-          msg.sender === myId ? "bg-sky-600" : "bg-white/10"
-        } space-y-2`}
-      >
-        {!!msg.image && (
-          <img
-            src={msg.image}
-            alt="Message Image"
-            className="max-w-full h-auto rounded"
-          />
-        )}
-        {!!msg.text && <p>{msg.text}</p>}
-
-        <span className="text-xs text-gray-200">
-          {formatChatDate(msg.createdAt)}
-        </span>
-      </div>
-    </div>
-  );
-}
+import Message from "./Message";
 
 export default function Chat() {
   const [text, setText] = useState<string>("");

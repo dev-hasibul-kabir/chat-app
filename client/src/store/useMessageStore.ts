@@ -2,6 +2,8 @@ import { create } from "zustand";
 import axios from "axios";
 import messageService from "../utils/api/api-services/messageService";
 import type { MessageStore } from "../utils/types/message";
+import { useAuthStore } from "./useAuthStore";
+import { playNotification } from "../utils/utilKit";
 
 const initialStatus = {
   getUsers: { loading: false, error: null },
@@ -116,5 +118,31 @@ export const useMessageStore = create<MessageStore>((set) => ({
       }));
       return { success: false, message: errorMsg };
     }
+  },
+
+  subscribeToNewMessages: (partnerId) => {
+    if (!partnerId) return;
+    const socket = useAuthStore.getState().socket;
+
+    socket?.on("newMessage", (newMessage) => {
+      set((state) => {
+        // Only add the new message if it's from the current chat partner
+        if (newMessage.sender === partnerId) {
+          if (
+            newMessage.sender !== useAuthStore.getState().user?._id &&
+            document.hidden
+          ) {
+            playNotification();
+          }
+          return { activeChat: [...state.activeChat, newMessage] };
+        }
+        return state;
+      });
+    });
+  },
+
+  unSubscribeFromNewMessages: () => {
+    const socket = useAuthStore.getState().socket;
+    socket?.off("newMessage");
   },
 }));

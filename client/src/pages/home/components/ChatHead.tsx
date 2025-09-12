@@ -1,7 +1,9 @@
 import { useNavigate } from "react-router";
 import type { MessageUser } from "../../../utils/types/message";
+import { useAuthStore } from "../../../store/useAuthStore";
 
 export default function ChatHead({ user }: { user: MessageUser }) {
+  const { onlineUsers } = useAuthStore();
   const navigate = useNavigate();
   return (
     <div
@@ -11,7 +13,11 @@ export default function ChatHead({ user }: { user: MessageUser }) {
       }}
     >
       <div className="col-span-1 relative">
-        <div className="size-3 rounded-full bg-green-500 border border-white absolute"></div>
+        <div
+          className={`size-3 rounded-full ${
+            onlineUsers?.includes(user._id) ? "bg-green-500" : "bg-gray-500"
+          }  border border-white absolute`}
+        ></div>
         <img
           src={user.profilePicture || "https://avatar.iran.liara.run/public/18"}
           alt="Avatar"

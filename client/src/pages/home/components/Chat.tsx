@@ -1,46 +1,24 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaFileImage } from "react-icons/fa";
 import { IoSend } from "react-icons/io5";
 import { useSearchParams } from "react-router";
 import { useMessageStore } from "../../../store/useMessageStore";
 import Input from "../../../components/Input";
-import type { Message } from "../../../utils/types/message";
 import { useAuthStore } from "../../../store/useAuthStore";
-import { formatChatDate } from "../../../utils/utilKit";
-
-function Message({ msg, myId }: { msg: Message; myId: string | undefined }) {
-  return (
-    <div
-      className={`flex ${
-        msg.sender === myId ? "justify-end" : "justify-start"
-      }`}
-    >
-      <div
-        className={`text-white p-3 rounded-lg max-w-xs ${
-          msg.sender === myId ? "bg-sky-600" : "bg-white/10"
-        } space-y-2`}
-      >
-        {!!msg.image && (
-          <img
-            src={msg.image}
-            alt="Message Image"
-            className="max-w-full h-auto rounded"
-          />
-        )}
-        {!!msg.text && <p>{msg.text}</p>}
-
-        <span className="text-xs text-gray-200">
-          {formatChatDate(msg.createdAt)}
-        </span>
-      </div>
-    </div>
-  );
-}
+import Message from "./Message";
 
 export default function Chat() {
   const [text, setText] = useState<string>("");
-  const { getMessages, sendMessage, activeChat, requestStatus } =
-    useMessageStore();
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  const {
+    getMessages,
+    sendMessage,
+    activeChat,
+    subscribeToNewMessages,
+    unSubscribeFromNewMessages,
+    requestStatus,
+  } = useMessageStore();
   const { user } = useAuthStore();
   const searchParam = useSearchParams();
   const partner_id = searchParam[0].get("id");
@@ -48,8 +26,18 @@ export default function Chat() {
   useEffect(() => {
     if (partner_id) {
       getMessages(partner_id);
+      subscribeToNewMessages(partner_id);
     }
-  }, [partner_id]);
+
+    return () => {
+      unSubscribeFromNewMessages();
+    };
+  }, [
+    partner_id,
+    getMessages,
+    subscribeToNewMessages,
+    unSubscribeFromNewMessages,
+  ]);
 
   function handleSendMessage() {
     try {
@@ -71,6 +59,10 @@ export default function Chat() {
       console.log("Failed to upload image:", error);
     }
   }
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "auto" });
+  }, [activeChat, requestStatus.getMessages.loading]);
 
   return (
     <>
@@ -104,6 +96,7 @@ export default function Chat() {
               <Message key={msg._id} msg={msg} myId={user?._id} />
             ))
           : "No messages"}
+        <div ref={bottomRef} />
       </div>
 
       <div className="fixed bottom-0 left-0 w-full flex gap-3 items-center p-6 bg-white/10 backdrop-blur-md">

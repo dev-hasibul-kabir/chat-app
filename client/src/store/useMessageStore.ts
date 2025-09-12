@@ -3,6 +3,7 @@ import axios from "axios";
 import messageService from "../utils/api/api-services/messageService";
 import type { MessageStore } from "../utils/types/message";
 import { useAuthStore } from "./useAuthStore";
+import { playNotification } from "../utils/utilKit";
 
 const initialStatus = {
   getUsers: { loading: false, error: null },
@@ -127,6 +128,12 @@ export const useMessageStore = create<MessageStore>((set) => ({
       set((state) => {
         // Only add the new message if it's from the current chat partner
         if (newMessage.sender === partnerId) {
+          if (
+            newMessage.sender !== useAuthStore.getState().user?._id &&
+            document.hidden
+          ) {
+            playNotification();
+          }
           return { activeChat: [...state.activeChat, newMessage] };
         }
         return state;

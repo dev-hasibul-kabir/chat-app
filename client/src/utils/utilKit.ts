@@ -27,3 +27,9 @@ export function formatChatDate(isoString: string): string {
     });
   }
 }
+
+//play notification Sound
+export const playNotification = () => {
+  const audio = new Audio("/notification.mp3");
+  audio.play().catch((err) => console.log("Audio play failed:", err));
+};

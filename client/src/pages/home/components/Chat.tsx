@@ -64,18 +64,24 @@ export default function Chat() {
     bottomRef.current?.scrollIntoView({ behavior: "auto" });
   }, [activeChat, requestStatus.getMessages.loading]);
 
+  if (!partner_id)
+    return (
+      <p className="text-center mt-20">
+        No chat selected.
+        <br /> Pick a contact to begin or start a new conversation.
+      </p>
+    );
+
   return (
-    <>
-      <div className="backdrop-blur-md bg-white/10 p-4 flex justify-between items-center ">
+    <div className="flex flex-col h-full">
+      <div className="backdrop-blur-md bg-white/10 p-4 flex justify-between items-center flex-shrink-0 border-b border-white/30">
         <div className="flex gap-3">
-          <div className="">
-            <img
-              src="https://avatar.iran.liara.run/public/18"
-              alt="Avatar"
-              className="w-12 h-12 rounded-full "
-            />
-          </div>
-          <div className="">
+          <img
+            src="https://avatar.iran.liara.run/public/18"
+            alt="Avatar"
+            className="w-12 h-12 rounded-full"
+          />
+          <div>
             <div className="flex gap-2 items-center">
               <h2 className="text-lg font-semibold">John Doe</h2>
               <span className="text-sm text-green-400">Online</span>
@@ -85,8 +91,7 @@ export default function Chat() {
         </div>
       </div>
 
-      {/* Chat Area */}
-      <div className="h-[80vh] overflow-y-auto scrollbar-thin p-6 space-y-4">
+      <div className="flex-1 bg-white/10 backdrop-blur-sm overflow-y-auto scrollbar-thin p-6 space-y-4">
         {requestStatus.getMessages.loading
           ? "Loading..."
           : !!requestStatus.getMessages.error
@@ -99,16 +104,15 @@ export default function Chat() {
         <div ref={bottomRef} />
       </div>
 
-      <div className="fixed bottom-0 left-0 w-full flex gap-3 items-center p-6 bg-white/10 backdrop-blur-md">
+      <div className="p-4 bg-white/10 backdrop-blur-md flex gap-3 items-center flex-shrink-0 border-t border-white/30">
         <Input
-          className="rounded-full pr-8"
+          className="flex-1 rounded-full pr-8"
           type="text"
           value={text}
           onChange={(val) => setText(val ? String(val) : "")}
           disabled={requestStatus.sendMessage.loading}
         />
         <button
-          className="absolute right-18 top-8.5 cursor-pointer"
           disabled={requestStatus.sendMessage.loading}
           onClick={handleSendMessage}
         >
@@ -117,7 +121,7 @@ export default function Chat() {
               requestStatus.sendMessage.loading
                 ? "text-white/40"
                 : "text-white/70"
-            } `}
+            }`}
           />
         </button>
 
@@ -133,6 +137,6 @@ export default function Chat() {
           <FaFileImage className="size-7 text-white/70" />
         </label>
       </div>
-    </>
+    </div>
   );
 }

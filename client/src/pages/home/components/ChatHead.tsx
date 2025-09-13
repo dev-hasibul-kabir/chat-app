@@ -7,29 +7,38 @@ export default function ChatHead({ user }: { user: MessageUser }) {
   const navigate = useNavigate();
   return (
     <div
-      className="grid grid-cols-6 hover:bg-white/10 p-2 rounded-lg cursor-pointer"
+      className="flex items-center gap-3 hover:bg-white/10 p-2 rounded-lg cursor-pointer"
       onClick={() => {
         navigate(`/message?id=${user._id}`);
       }}
     >
-      <div className="col-span-1 relative">
+      {/* Avatar + Status */}
+      <div className="relative flex-shrink-0">
         <div
           className={`size-3 rounded-full ${
             onlineUsers?.includes(user._id) ? "bg-green-500" : "bg-gray-500"
-          }  border border-white absolute`}
+          } border border-white absolute top-0 right-0`}
         ></div>
         <img
           src={user.profilePicture || "https://avatar.iran.liara.run/public/18"}
           alt="Avatar"
-          className="w-12 h-12 rounded-full border-2 border-blue-400"
+          className="w-12 h-12 rounded-full border-2 border-blue-400 object-cover"
         />
       </div>
-      <div className="col-span-5">
-        <div className="flex justify-between items-center">
-          <h2 className="text-lg font-semibold">{user.name}</h2>
-          <span className="text-sm text-gray-400">2:30 PM</span>
+
+      {/* Text Section */}
+      <div className="flex-1 min-w-0">
+        <div className="flex flex-row items-center justify-between">
+          <h2 className="text-base sm:text-lg font-semibold truncate">
+            {user.name}
+          </h2>
+          <span className="text-xs sm:text-sm text-gray-400 mt-1 sm:mt-0">
+            2:30 PM
+          </span>
         </div>
-        <p className="text-gray-300">Hey! How are you?</p>
+        <p className="text-gray-300 text-sm sm:text-base truncate">
+          Hey! How are you?
+        </p>
       </div>
     </div>
   );

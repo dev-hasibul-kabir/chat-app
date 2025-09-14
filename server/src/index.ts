@@ -21,7 +21,7 @@ app.use(cookieParser());
 
 //routes
 app.use("/api/auth", authRoutes);
-app.use("/api/message", messageRoutes);
+app.use("/api", messageRoutes);
 
 const PORT = Number(process.env.PORT) || 3000;
 

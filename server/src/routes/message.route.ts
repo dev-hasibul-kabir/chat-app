@@ -9,10 +9,15 @@ messageRoutes.get("/users", authorizedRoute, messageController.getUsers);
 messageRoutes.get(
   "/users/:userId",
   authorizedRoute,
+  messageController.getActiveChatPartner
+);
+messageRoutes.get(
+  "/message/users/:userId",
+  authorizedRoute,
   messageController.getMessages
 );
 messageRoutes.post(
-  "/users/:userId",
+  "/message/users/:userId",
   authorizedRoute,
   fileUpload("image", false),
   messageController.createMessage

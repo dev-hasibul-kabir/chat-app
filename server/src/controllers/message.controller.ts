@@ -7,6 +7,7 @@ import { getSocketIdByUserId, io } from "../lib/socket-io";
 
 interface MessageController {
   getUsers: (req: Request, res: Response) => void;
+  getActiveChatPartner: (req: Request, res: Response) => void;
   getMessages: (req: Request, res: Response) => void;
   createMessage: (req: Request, res: Response) => void;
 }
@@ -22,6 +23,20 @@ const messageController: MessageController = {
       res.status(200).json(users);
     } catch (error) {
       console.log("Error fetching users:", error);
+      res.status(500).json({ message: "Server error" });
+    }
+  },
+  getActiveChatPartner: async (req, res) => {
+    try {
+      const { userId: chatPartnerId } = req.params;
+      const user = await User.findById(chatPartnerId).select(
+        "-password -createdAt -updatedAt"
+      );
+      if (!user)
+        return res.status(404).json({ message: "Chat partner not found" });
+      res.status(200).json(user);
+    } catch (error) {
+      console.log("Error fetching active chat partner:", error);
       res.status(500).json({ message: "Server error" });
     }
   },

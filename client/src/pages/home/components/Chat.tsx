@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { FaFileImage } from "react-icons/fa";
 import { IoSend } from "react-icons/io5";
+import { TbMessage, TbMessageX } from "react-icons/tb";
 import { useSearchParams } from "react-router";
 import { useMessageStore } from "../../../store/useMessageStore";
 import Input from "../../../components/Input";
@@ -66,10 +67,13 @@ export default function Chat() {
 
   if (!partner_id)
     return (
-      <p className="text-center mt-20">
-        No chat selected.
-        <br /> Pick a contact to begin or start a new conversation.
-      </p>
+      <div className="flex flex-col items-center justify-center h-full backdrop-blur-md bg-white/10">
+        <TbMessageX className="size-20" />
+        <p className="text-center text-lg mt-4">
+          No chat selected.
+          <br /> Pick a contact to begin or start a new conversation.
+        </p>
+      </div>
     );
 
   return (
@@ -92,15 +96,22 @@ export default function Chat() {
       </div>
 
       <div className="flex-1 bg-white/10 backdrop-blur-sm overflow-y-auto scrollbar-thin p-6 space-y-4">
-        {requestStatus.getMessages.loading
-          ? "Loading..."
-          : !!requestStatus.getMessages.error
-          ? requestStatus.getMessages.error
-          : activeChat?.length
-          ? activeChat.map((msg) => (
-              <Message key={msg._id} msg={msg} myId={user?._id} />
-            ))
-          : "No messages"}
+        {requestStatus.getMessages.loading ? (
+          "Loading..."
+        ) : !!requestStatus.getMessages.error ? (
+          requestStatus.getMessages.error
+        ) : activeChat?.length ? (
+          activeChat.map((msg) => (
+            <Message key={msg._id} msg={msg} myId={user?._id} />
+          ))
+        ) : (
+          <div className="flex flex-col items-center justify-center h-full">
+            <TbMessage className="size-20" />
+            <p className="text-center text-lg mt-4">
+              No message yet. Start the conversation!
+            </p>
+          </div>
+        )}
         <div ref={bottomRef} />
       </div>
 

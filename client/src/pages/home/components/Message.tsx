@@ -17,7 +17,7 @@ function Message({
     >
       <div
         className={`text-white p-3 rounded-lg max-w-xs ${
-          msg.sender === myId ? "bg-sky-600" : "bg-white/10"
+          msg.sender === myId ? "bg-sky-500" : "bg-white/20"
         } space-y-2`}
       >
         {!!msg.image && (

@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { FiUsers } from "react-icons/fi";
 import { useMessageStore } from "../../../store/useMessageStore";
 import ChatHead from "./ChatHead";
 
@@ -25,13 +26,18 @@ export default function ConversationList() {
         className="mt-6 bg-white/10 backdrop-blur-md p-4 space-y-6 
                   overflow-y-auto scrollbar-thin flex-1"
       >
-        {loading
-          ? "Loading..."
-          : !!error
-          ? error
-          : users?.length
-          ? users.map((user) => <ChatHead key={user._id} user={user} />)
-          : "No users"}
+        {loading ? (
+          "Loading..."
+        ) : !!error ? (
+          error
+        ) : users?.length ? (
+          users.map((user) => <ChatHead key={user._id} user={user} />)
+        ) : (
+          <div className="flex flex-col items-center justify-center h-full">
+            <FiUsers className="size-10" />
+            <p className="text-xl tracking-wider text-center mt-4">No Users!</p>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -66,7 +66,7 @@ export const useMessageStore = create<MessageStore>((set) => ({
         activechatPartner: res.data,
         requestStatus: {
           ...state.requestStatus,
-          getUsers: { loading: false, error: null },
+          getActiveChatPartner: { loading: false, error: null },
         },
       }));
 

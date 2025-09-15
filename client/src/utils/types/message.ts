@@ -20,7 +20,11 @@ export interface MessageUser {
   profilePicture?: string;
 }
 
-type RequestKey = "getUsers" | "getMessages" | "sendMessage";
+type RequestKey =
+  | "getUsers"
+  | "getMessages"
+  | "sendMessage"
+  | "getActiveChatPartner";
 interface AsyncState {
   loading: boolean;
   error: string | null;

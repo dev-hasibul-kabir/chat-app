@@ -32,12 +32,12 @@ export default function User({ user }: { user: MessageUser }) {
           <h2 className="text-base sm:text-lg font-semibold truncate">
             {user.name}
           </h2>
-          <span className="text-xs sm:text-sm text-gray-400 mt-1 sm:mt-0">
+          {/* <span className="text-xs sm:text-sm text-gray-400 mt-1 sm:mt-0">
             2:30 PM
-          </span>
+          </span> */}
         </div>
         <p className="text-gray-300 text-sm sm:text-base truncate">
-          Hey! How are you?
+          {user.email}
         </p>
       </div>
     </div>

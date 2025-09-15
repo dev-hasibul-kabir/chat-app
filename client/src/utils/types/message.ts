@@ -35,7 +35,9 @@ export interface MessageStore {
   activeChat: Message[];
   requestStatus: Record<RequestKey, AsyncState>;
 
-  getUsers: () => Promise<{ success: boolean; message?: string }>;
+  getUsers: (
+    searchTerm: string
+  ) => Promise<{ success: boolean; message?: string }>;
   getActiveChatPartner: (
     partnerId: string
   ) => Promise<{ success: boolean; message?: string }>;

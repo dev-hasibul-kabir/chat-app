@@ -17,9 +17,14 @@ const messageController: MessageController = {
     try {
       const myId = req.user._id;
 
-      const users = await User.find({ _id: { $ne: myId } }).select(
-        "-password -createdAt -updatedAt"
-      );
+      const searchQuery = req.query.search || "";
+      const searchRegex = new RegExp(searchQuery as string, "i"); // Case-insensitive regex
+
+      const users = await User.find({
+        _id: { $ne: myId },
+        $or: [{ name: searchRegex }, { email: searchRegex }],
+      }).select("-password -createdAt -updatedAt");
+
       res.status(200).json(users);
     } catch (error) {
       console.log("Error fetching users:", error);

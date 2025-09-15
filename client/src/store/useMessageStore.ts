@@ -17,7 +17,7 @@ export const useMessageStore = create<MessageStore>((set) => ({
   activeChat: [],
   requestStatus: initialStatus,
 
-  getUsers: async () => {
+  getUsers: async (searchTerm: string) => {
     try {
       set((state) => ({
         requestStatus: {
@@ -26,7 +26,7 @@ export const useMessageStore = create<MessageStore>((set) => ({
         },
       }));
 
-      const res = await messageService.getUsers();
+      const res = await messageService.getUsers(searchTerm);
 
       set((state) => ({
         users: res.data,

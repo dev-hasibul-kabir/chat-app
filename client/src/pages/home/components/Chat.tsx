@@ -7,6 +7,7 @@ import { useMessageStore } from "../../../store/useMessageStore";
 import Input from "../../../components/Input";
 import { useAuthStore } from "../../../store/useAuthStore";
 import Message from "./Message";
+import ChatInboxHeader from "./ChatInboxHeader";
 
 export default function Chat() {
   const [text, setText] = useState<string>("");
@@ -78,23 +79,7 @@ export default function Chat() {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="backdrop-blur-md bg-white/10 p-4 flex justify-between items-center flex-shrink-0 border-b border-white/30">
-        <div className="flex gap-3">
-          <img
-            src="https://avatar.iran.liara.run/public/18"
-            alt="Avatar"
-            className="w-12 h-12 rounded-full"
-          />
-          <div>
-            <div className="flex gap-2 items-center">
-              <h2 className="text-lg font-semibold">John Doe</h2>
-              <span className="text-sm text-green-400">Online</span>
-            </div>
-            <p className="text-white">@john</p>
-          </div>
-        </div>
-      </div>
-
+      <ChatInboxHeader partner_id={partner_id} />
       <div className="flex-1 bg-white/10 backdrop-blur-sm overflow-y-auto scrollbar-thin p-6 space-y-4">
         {requestStatus.getMessages.loading ? (
           "Loading..."

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { FiUsers } from "react-icons/fi";
 import { useMessageStore } from "../../../store/useMessageStore";
-import ChatHead from "./ChatHead";
+import User from "./User";
 
 export default function ConversationList() {
   const { getUsers, users, requestStatus } = useMessageStore();
@@ -31,7 +31,7 @@ export default function ConversationList() {
         ) : !!error ? (
           error
         ) : users?.length ? (
-          users.map((user) => <ChatHead key={user._id} user={user} />)
+          users.map((user) => <User key={user._id} user={user} />)
         ) : (
           <div className="flex flex-col items-center justify-center h-full">
             <FiUsers className="size-10" />

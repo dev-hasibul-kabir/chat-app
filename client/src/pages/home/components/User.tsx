@@ -2,7 +2,7 @@ import { useNavigate } from "react-router";
 import type { MessageUser } from "../../../utils/types/message";
 import { useAuthStore } from "../../../store/useAuthStore";
 
-export default function ChatHead({ user }: { user: MessageUser }) {
+export default function User({ user }: { user: MessageUser }) {
   const { onlineUsers } = useAuthStore();
   const navigate = useNavigate();
   return (

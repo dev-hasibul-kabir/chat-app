@@ -38,7 +38,7 @@ export default function SideNavBar() {
             user?.profilePicture || "https://avatar.iran.liara.run/public/30"
           }
           alt="profile"
-          className="w-12 h-12 rounded-full"
+          className="w-12 h-12 rounded-full object-cover object-top"
         />
         <p className="text-xs mt-2 text-center break-words w-20">
           {user?.email ? user.email.split("@")[0] : ""}
@@ -50,6 +50,7 @@ export default function SideNavBar() {
         {navItems.map((item) =>
           item.id == "logout" ? (
             <button
+              key={item.id}
               className="flex flex-col items-center text-sm text-white cursor-pointer"
               onClick={handleLogout}
             >

@@ -27,10 +27,14 @@ interface AsyncState {
 }
 export interface MessageStore {
   users: MessageUser[];
+  activechatPartner: MessageUser | null;
   activeChat: Message[];
   requestStatus: Record<RequestKey, AsyncState>;
 
   getUsers: () => Promise<{ success: boolean; message?: string }>;
+  getActiveChatPartner: (
+    partnerId: string
+  ) => Promise<{ success: boolean; message?: string }>;
   getMessages: (
     partnerId: string
   ) => Promise<{ success: boolean; message?: string }>;

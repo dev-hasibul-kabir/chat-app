@@ -7,11 +7,13 @@ import { playNotification } from "../utils/utilKit";
 
 const initialStatus = {
   getUsers: { loading: false, error: null },
+  getActiveChatPartner: { loading: false, error: null },
   getMessages: { loading: false, error: null },
   sendMessage: { loading: false, error: null },
 };
 export const useMessageStore = create<MessageStore>((set) => ({
   users: [],
+  activechatPartner: null,
   activeChat: [],
   requestStatus: initialStatus,
 
@@ -44,6 +46,40 @@ export const useMessageStore = create<MessageStore>((set) => ({
         requestStatus: {
           ...state.requestStatus,
           getUsers: { loading: false, error: errorMsg },
+        },
+      }));
+      return { success: false, message: errorMsg };
+    }
+  },
+
+  getActiveChatPartner: async (partnerId) => {
+    try {
+      set((state) => ({
+        requestStatus: {
+          ...state.requestStatus,
+          getActiveChatPartner: { loading: true, error: null },
+        },
+      }));
+
+      const res = await messageService.getActiveChatPartner(partnerId);
+      set((state) => ({
+        activechatPartner: res.data,
+        requestStatus: {
+          ...state.requestStatus,
+          getUsers: { loading: false, error: null },
+        },
+      }));
+
+      return { success: true };
+    } catch (error) {
+      let errorMsg = "Failed to load active chat!";
+      if (axios.isAxiosError(error)) {
+        errorMsg = error.response?.data?.message || error.message || errorMsg;
+      }
+      set((state) => ({
+        requestStatus: {
+          ...state.requestStatus,
+          getActiveChatPartner: { loading: false, error: errorMsg },
         },
       }));
       return { success: false, message: errorMsg };

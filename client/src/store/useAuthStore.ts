@@ -38,7 +38,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
         user: profile.data,
         requestStatus: {
           ...state.requestStatus,
-          ["login"]: { loading: true, error: null },
+          ["login"]: { loading: false, error: null },
         },
       }));
 
@@ -53,7 +53,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       set((state) => ({
         requestStatus: {
           ...state.requestStatus,
-          ["login"]: { loading: true, error: null },
+          ["login"]: { loading: false, error: errorMsg },
         },
       }));
       return { success: false, message: errorMsg };

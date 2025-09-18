@@ -8,6 +8,7 @@ import Input from "../../../components/Input";
 import { useAuthStore } from "../../../store/useAuthStore";
 import Message from "./Message";
 import ChatInboxHeader from "./ChatInboxHeader";
+import toast from "react-hot-toast";
 
 export default function Chat() {
   const [text, setText] = useState<string>("");
@@ -41,23 +42,42 @@ export default function Chat() {
     unSubscribeFromNewMessages,
   ]);
 
-  function handleSendMessage() {
+  async function handleSendMessage() {
     try {
       if (!text.trim() || !partner_id) return;
-      sendMessage(partner_id, { text: text.trim() });
-      setText("");
+      const { success, message } = await sendMessage(partner_id, {
+        text: text.trim(),
+      });
+      if (success) {
+        setText("");
+      } else {
+        toast.error(
+          message ?? "An unexpected error occurred. Please try again."
+        );
+      }
     } catch (error) {
+      toast.error("An unexpected error occurred. Please try again.");
       console.log("Failed to send message:", error);
     }
   }
 
-  function handleImmageUpload(event: React.ChangeEvent<HTMLInputElement>) {
+  async function handleImmageUpload(
+    event: React.ChangeEvent<HTMLInputElement>
+  ) {
     try {
       const file = event.target.files?.[0];
       if (!file || !partner_id) return;
 
-      sendMessage(partner_id, { image: file });
+      const { success, message } = await sendMessage(partner_id, {
+        image: file,
+      });
+      if (!success) {
+        toast.error(
+          message ?? "An unexpected error occurred. Please try again."
+        );
+      }
     } catch (error) {
+      toast.error("An unexpected error occurred. Please try again.");
       console.log("Failed to upload image:", error);
     }
   }

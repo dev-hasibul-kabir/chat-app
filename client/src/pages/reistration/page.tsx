@@ -5,6 +5,7 @@ import { Controller, useForm } from "react-hook-form";
 import Input from "../../components/Input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuthStore } from "../../store/useAuthStore";
+import toast from "react-hot-toast";
 
 const signupSchema = z.object({
   name: z.string().nonempty("Name is required!"),
@@ -19,7 +20,7 @@ type FormData = z.infer<typeof signupSchema>;
 export default function Registration() {
   const navigate = useNavigate();
   const { register, requestStatus } = useAuthStore();
-  const { loading, error } = requestStatus.register;
+  const { loading } = requestStatus.register;
 
   const {
     handleSubmit,
@@ -38,13 +39,14 @@ export default function Registration() {
     try {
       const { success, message } = await register(data);
       if (success) {
-        console.log(message);
+        toast.success(message);
         navigate("/message", { replace: true });
       } else {
-        console.log(error);
+        toast.error(message);
       }
     } catch (error) {
       console.log(error);
+      toast.error("Something went wrong! Try again.");
     }
   };
 

@@ -5,6 +5,7 @@ import Input from "../../components/Input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useNavigate } from "react-router";
 import { useAuthStore } from "../../store/useAuthStore";
+import toast from "react-hot-toast";
 
 const loginSchema = z.object({
   email: z.string().min(1, "Email is required!").email(),
@@ -19,7 +20,7 @@ type FormData = z.infer<typeof loginSchema>;
 export default function Login() {
   const navigate = useNavigate();
   const { login, requestStatus } = useAuthStore();
-  const { loading, error } = requestStatus.login;
+  const { loading } = requestStatus?.login;
   const {
     handleSubmit,
     control,
@@ -37,16 +38,14 @@ export default function Login() {
       const { success, message } = await login(data);
 
       if (success) {
-        // toast.success(message);
-        console.log(message);
+        toast.success(message);
         navigate("/message", { replace: true });
       } else {
-        console.log(error);
-        // toast.error(message);
+        toast.error(message);
       }
     } catch (err) {
       // fallback in case something unexpected happens
-      // toast.error("An unexpected error occurred. Please try again.");
+      toast.error("An unexpected error occurred. Please try again.");
       console.error(err);
     }
   };

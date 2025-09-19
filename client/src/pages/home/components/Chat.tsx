@@ -9,6 +9,7 @@ import { useAuthStore } from "../../../store/useAuthStore";
 import Message from "./Message";
 import ChatInboxHeader from "./ChatInboxHeader";
 import toast from "react-hot-toast";
+import ChatMessageSkeleton from "../../../components/ui/skeleton/MessageSkeleton";
 
 export default function Chat() {
   const [text, setText] = useState<string>("");
@@ -102,7 +103,9 @@ export default function Chat() {
       <ChatInboxHeader partner_id={partner_id} />
       <div className="flex-1 bg-white/10 backdrop-blur-sm overflow-y-auto scrollbar-thin p-6 space-y-4">
         {requestStatus.getMessages.loading ? (
-          "Loading..."
+          [false, true, false, true, false, true].map((isOwn, i) => (
+            <ChatMessageSkeleton key={i} isOwn={isOwn} />
+          ))
         ) : !!requestStatus.getMessages.error ? (
           requestStatus.getMessages.error
         ) : activeChat?.length ? (

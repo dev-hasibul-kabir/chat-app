@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useMessageStore } from "../../../store/useMessageStore";
 import { useAuthStore } from "../../../store/useAuthStore";
+import ChatHeaderSkeleton from "../../../components/ui/skeleton/ChatHeaderSkeleton";
 
 export default function ChatInboxHeader({
   partner_id,
@@ -19,7 +20,7 @@ export default function ChatInboxHeader({
     }
   }, [partner_id]);
 
-  if (loading) return "Loading...";
+  if (loading) return <ChatHeaderSkeleton />;
 
   return (
     <div className="backdrop-blur-md bg-white/10 p-4 flex justify-between items-center flex-shrink-0 border-b border-white/30">

@@ -3,6 +3,7 @@ import { RxCrossCircled } from "react-icons/rx";
 import { FiUsers } from "react-icons/fi";
 import { useMessageStore } from "../../../store/useMessageStore";
 import User from "./User";
+import ChatListItemSkeleton from "../../../components/ui/skeleton/ChatListItemSkeleton";
 
 export default function ConversationList() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -39,7 +40,7 @@ export default function ConversationList() {
                   overflow-y-auto scrollbar-thin flex-1"
       >
         {loading ? (
-          "Loading..."
+          [...Array(6)].map((_, i) => <ChatListItemSkeleton key={i} />)
         ) : !!error ? (
           error
         ) : users?.length ? (

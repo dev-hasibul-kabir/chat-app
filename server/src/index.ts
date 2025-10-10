@@ -6,6 +6,7 @@ import { connectDB } from "./lib/db";
 import authRoutes from "./routes/auth.route";
 import messageRoutes from "./routes/message.route";
 import { app, server } from "./lib/socket-io";
+import path from "path";
 
 dotenv.config();
 
@@ -22,6 +23,14 @@ app.use(cookieParser());
 //routes
 app.use("/api/auth", authRoutes);
 app.use("/api", messageRoutes);
+
+/// Server Client build
+const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, "../client/dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/dist/index.html"));
+});
 
 const PORT = Number(process.env.PORT) || 3000;
 
